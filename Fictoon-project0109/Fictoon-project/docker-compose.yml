@@ -10,33 +10,6 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=mypass
-
-  web:
-    build:
-      context: app
-      dockerfile: Dockerfile
-    hostname: web
-    command: ./scripts/run_web.sh
-    volumes:
-      - .:/app
-    ports:
-      - "5000:5000"
-    links:
-      - rabbit
-      - redis
-
-  worker:
-    build:
-      context: app
-      dockerfile: Dockerfile
-    command: ./scripts/run_celery.sh
-    volumes:
-      - .:/app
-    links:
-      - rabbit
-      - redis
-    depends_on:
-      - rabbit
   #react
   app:
     restart: always
@@ -66,6 +39,7 @@ services:
       MONGODB_USERNAME: flaskuser
       MONGODB_PASSWORD: f19skp9ssw0rd
       MONGODB_HOSTNAME: mongodb
+    command: ./scripts/run_celery.sh
     volumes:
       - appdata:/var/www
     depends_on:
