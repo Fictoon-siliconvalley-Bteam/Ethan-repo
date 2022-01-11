@@ -8,7 +8,7 @@ from io import BytesIO
 from celery import Celery, current_task
 from celery.result import AsyncResult
 
-from PIL import Image  
+from PIL import Image
 import os
 import time
 from test import test_numbering
@@ -32,18 +32,18 @@ def get_job(job_id):
 @CELERY.task()
 def image_demension(img):
     time.sleep(2)
-    im = Image.open(img)  
-    width, height = im.size  
+    im = Image.open(img)
+    width, height = im.size
     left = 4
     top = height / 5
     right = 154
     bottom = 3 * height / 5
 
     # Cropped image of above dimension  \
-    im1 = im.crop((left, top, right, bottom)) 
-    newsize = (300, 300) 
-    im1 = im1.resize(newsize) 
-    width, height = im1.size  
+    im1 = im.crop((left, top, right, bottom))
+    newsize = (300, 300)
+    im1 = im1.resize(newsize)
+    width, height = im1.size
     location=os.path.join('static/worker-img','cropped_img.'+im.format.lower())
     im1.save(os.path.join('static/worker-img','cropped_img.'+im.format.lower()))
     test_numbering()
