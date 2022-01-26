@@ -124,7 +124,7 @@ class Callback:
             self.web_interface.put_iterate(iterate, self.st.get_image_tensor())
         if iterate.i == iterate.i_max:
             self.progress.close()
-            if max(iterate.w, iterate.h) != 128:  # max size for image
+            if max(iterate.w, iterate.h) != 512:  # max size for image
                 save_image(self.args.output, self.st.get_image(self.image_type))
             else:
                 if self.web_interface is not None:
@@ -141,7 +141,6 @@ class Callback:
 
 
 def main():
-    print('3')
     #setup_exceptions()
     #fix_start_method()
 
@@ -204,9 +203,8 @@ def main():
 
     args, unknown = p.parse_known_args()
     #args, unknown = parser.parse_known_args()
-    print('4')
-    content_img = load_image("source.jpg", None)  #  content image ex) 1.jpg
-    style_imgs = [load_image("style.jpg", None)]    #  style image ex) 2.jpg
+    content_img = load_image("style_transfer/image/source.jpg", None)  #  content image ex) 1.jpg
+    style_imgs = [load_image("style_transfer/image/style.jpg", None)]    #  style image ex) 2.jpg
 
     image_type = 'pil'
     if Path(args.output).suffix.lower() in {'.tif', '.tiff'}:
@@ -225,13 +223,13 @@ def main():
 
     if devices[0].type == 'cpu':
         print('CPU threads:', torch.get_num_threads())
-    # if devices[0].type == 'cuda':
-    #     for i, device in enumerate(devices):
-    #         props = torch.cuda.get_device_properties(device)
-    #         print(f'GPU {i} type: {props.name} (compute {props.major}.{props.minor})')
-    #         print(f'GPU {i} RAM:', round(props.total_memory / 1024 / 1024), 'MB')
+    if devices[0].type == 'cuda':
+        for i, device in enumerate(devices):
+            props = torch.cuda.get_device_properties(device)
+            print(f'GPU {i} type: {props.name} (compute {props.major}.{props.minor})')
+            print(f'GPU {i} RAM:', round(props.total_memory / 1024 / 1024), 'MB')
 
-    end_scale = 128
+    end_scale = 354
     # if args.end_scale.endswith('+'):
     #     end_scale = get_safe_scale(*content_img.size, end_scale)
     # args.end_scale = end_scale
@@ -269,6 +267,8 @@ def main():
         save_image(args.output, output_image)
     with open('trace.json', 'w') as fp:
         json.dump(callback.get_trace(), fp, indent=4)
+
+    return True
 
 
 if __name__ == '__main__':

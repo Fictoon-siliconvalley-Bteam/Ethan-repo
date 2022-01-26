@@ -8,21 +8,15 @@ const Footer = () => {
                 <FooterLinksContainer>
                     <FooterLinksWrapper>
                         <FooterLinkItems>
-                            <FooterLinkTitle>About us</FooterLinkTitle>
-                                <FooterLink to='/'>ss</FooterLink>
-                                <FooterLink to='/'>ss</FooterLink>
-                                <FooterLink to='/'>ss</FooterLink>
-                                <FooterLink to='/'>ss</FooterLink>
-                                <FooterLink to='/'>ss</FooterLink>
                         </FooterLinkItems>
                     </FooterLinksWrapper>
                 </FooterLinksContainer>
                 <SocialMedia>
             <SocialMediaWrap>
                 <SocialLogo to='/'>
-                    Fictoon
+                    Pictoon
                 </SocialLogo>
-                <WebsiteRights>Fictoon ⓒ {new Date().getFullYear()} All rights reserved. </WebsiteRights>
+                <WebsiteRights>Pictoon ⓒ {new Date().getFullYear()} All rights reserved. </WebsiteRights>
                     <SocialIcons>
                         <SocialIconLink href="https://join.slack.com/t/2022siliconva-6kd9406/shared_invite/zt-10yn9ehq9-kNeDt89jmsCqYZh0BrhN6w" target="_blank"
                             aria-label="Slack">

@@ -1,16 +1,19 @@
 version: '3'
 services:
-#  redis:
-#     image: redis:latest
-#     hostname: redis
-  #react
-  app:
+  redis:
+     image: redis:latest
+     hostname: redis
+     ports:
+       - '6379:6379'
+
+  frontend:
     restart: always
     build:
       context: frontend
       dockerfile: Dockerfile
     volumes:
-      - '.:/usr/src/app'
+      - './frontend:/frontend'
+    container_name: frontend
     ports:
       - '3000:3000'
     environment:
@@ -33,22 +36,23 @@ services:
       context: app
       dockerfile: style_transfer_pytorch/Dockerfile
     container_name: flask
-    image: python3.6
+    image: python:3.6
+    
     restart: unless-stopped
     tty: true
     command : gunicorn -b 0.0.0.0:5005 -w 3 -t 240 wsgi
-    environment:
-      MONGODB_DATABASE: flaskdb
-      MONGODB_USERNAME: flaskuser
-      MONGODB_PASSWORD: f19skp9ssw0rd
-      MONGODB_HOSTNAME: mongodb
+#    environment:
+##      MONGODB_DATABASE: flaskdb
+##      MONGODB_USERNAME: flaskuser
+##      MONGODB_PASSWORD: f19skp9ssw0rd
+##      MONGODB_HOSTNAME: mongodb
     volumes:
-      - ./app/:/app
+      - ./app:/app
     depends_on:
       - rabbit
-      - mongodb
+#      - mongodb
 #    networks:
-#      - frontend
+#      - frontend1
 #      - backend
     links:
       - rabbit
@@ -63,21 +67,23 @@ services:
       - rabbit
     depends_on:
       - rabbit
+    volumes:
+      - ./app:/app
   #MongoDB database container
-  mongodb:
-    image: mongo:4.0.8
-    container_name: mongodb
-    restart: unless-stopped
-    command: mongod --auth
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongodbuser
-      MONGO_INITDB_ROOT_PASSWORD: cl3v3rP9ssw0rd
-      MONGO_INITDB_DATABASE: flaskdb
-      MONGODB_DATABASE: flaskdb
-      MONGODB_USER: flaskuser
-      MONGODB_PASS: f19skp9ssw0rd
-      MONGODB_DATA_DIR: /data/db
-      MONDODB_LOG_DIR: /dev/null
+#  mongodb:
+#    image: mongo:4.0.8
+#    container_name: mongodb
+#    restart: unless-stopped
+#    command: mongod --auth
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: mongodbuser
+#      MONGO_INITDB_ROOT_PASSWORD: cl3v3rP9ssw0rd
+#      MONGO_INITDB_DATABASE: flaskdb
+#      MONGODB_DATABASE: flaskdb
+#      MONGODB_USER: flaskuser
+#      MONGODB_PASS: f19skp9ssw0rd
+#      MONGODB_DATA_DIR: /data/db
+#      MONDODB_LOG_DIR: /dev/null
 #    networks:
 #      - backend
 
@@ -101,11 +107,11 @@ services:
     depends_on:
       - flask
 #    networks:
-#      - frontend
+#      - frontend1
 
 #Docker Networks
 #networks:
-#  frontend:
+#  frontend1:
 #    driver: bridge
 #  backend:
 #    driver: bridge
